@@ -1,5 +1,26 @@
 // Importa o módulo nativo 'http' do Node.js
 const http = require('http');
+const mysql = require('mysql2');
+
+// 1. configura a conexão com o mysql
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'kiwi'
+});
+
+// conecta ao banco de dados
+connection.connect((err) => {
+    if (err) {
+        console.error('erro ao conectar ao mysql: ', err.stack);
+        return;
+    }
+    console.log('conectado ao mysql com sucesso!');
+});
+
+
+
 
 // Define o endereço (localhost) e a porta onde o servidor vai escutar
 const hostname = '127.0.0.1';
@@ -18,12 +39,11 @@ const server = http.createServer((req, res) => {
         return res.end('<h1>lista de alunos</h1>'); // o return impede a execução das linhas de baixo
     }
 
-
-    // Define o status HTTP como 200 (OK) e o tipo de conteúdo como texto plano em UTF-8
-    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    // se nenhuma rota acima for satisfeita, cai no 404
+    res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
 
     // Envia a resposta para o navegador/cliente
-    res.end('<h1>Olá, alunos! O servidor Node.js está rodando com sucesso!\n</h1>');
+    res.end('<h1 style="color: red;">404 - not found in the system</h1>');
 
 
 });
